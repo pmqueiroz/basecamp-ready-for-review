@@ -3,6 +3,19 @@ description: 'Use basecamp chatbots to notify when a pull request are ready to r
 branding:
   color: purple
   icon: message-circle
+inputs:
+  account_id:
+    description: 'Basecamp account id'
+    required: true
+    default: ''
+  bucket_id:
+    description: 'Basecamp bucket id'
+    required: true
+    default: ''
+  chat_id:
+    description: 'Basecamp chat id'
+    required: true
+    default: ''
 
 runs:
   using: 'node12'
