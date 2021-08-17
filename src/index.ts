@@ -10,11 +10,9 @@ const DEFAULT_MESSAGE_READY_TO_REVIEW = '<p>✨ pull request <b>${pr_title}#${pr
 const DEFAULT_MESSAGE_PR_OPEN = '<p>🚀${pr_author} opened pull request <b>${pr_title}#${pr_number}</b> <a href="${html_url}">↗</a></p>'
 
 const messageFactory = (pull: PullRequestPayload, defaultMessage: string) => {
-   const { html_url, number: pr_number, title: pr_title } = pull
+   const { html_url, number: pr_number, title: pr_title, user: { login: pr_author } } = pull
 
-   Core.debug(JSON.stringify(pull))
-
-   return dynamicTemplate(defaultMessage, { pr_title, pr_number, html_url })
+   return dynamicTemplate(defaultMessage, { pr_title, pr_number, html_url, pr_author })
 }
 
 Core.debug('Running action on version ' + version)
