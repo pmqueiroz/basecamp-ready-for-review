@@ -24,6 +24,6 @@ jobs:
         env:
            BASECAMP_CHATBOT_SECRET: ${{ secrets.BASECAMP_CHATBOT_KEY }}
         with:
+           # do not replace this ${basecamp_api_key} below
            chatlines_url: "/7777777/integrations/${basecamp_api_key}/buckets/88888888/chats/9999999999/lines"
-
 ```
