@@ -1,5 +1,5 @@
-import Core from '@actions/core'
-import Github from '@actions/github'
+import * as Core from '@actions/core'
+import * as Github from '@actions/github'
 import { dynamicTemplate } from './dynamic-string'
 
 import { messageClient } from './client'
@@ -42,7 +42,7 @@ async function run() {
    const payload = Github.context.payload
    const pr = payload.pull_request
 
-   if (!pr?.draft && payload.review.state === 'ready_for_review') return
+   if (!pr?.draft) return
 
    const message = messageFactory(pr as PullRequestPayload)
 
@@ -53,14 +53,13 @@ async function run() {
    }
 
    try {
-      const { chatLines } = await messageClient(message, config)
+      const response = await messageClient(message, config)
       
-      Core.debug(chatLines)
+      Core.debug(response?.data)
    } catch (error) {
       Core.setFailed(error)
    }
    
 }
-
 
 run().catch(error => Core.setFailed("Workflow failed! " + error.message))

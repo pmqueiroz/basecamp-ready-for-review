@@ -7,7 +7,7 @@
     "author": "pmqueiroz <pedroqueiroz593@gmail.com>",
     "license": "MIT",
     "scripts": {
-        "build": "tsc && ncc build lib/index.js"
+        "build": "tsc && ncc build -m lib/src/index.js"
     },
     "dependencies": {
         "@actions/core": "^1.4.0",
@@ -17,6 +17,7 @@
     },
     "devDependencies": {
         "@types/node": "^16.6.1",
+        "@types/ramda": "^0.27.44",
         "@vercel/ncc": "^0.29.1",
         "typescript": "^4.3.5"
     }

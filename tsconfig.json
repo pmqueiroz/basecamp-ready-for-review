@@ -3,12 +3,11 @@
      "target": "es6",
      "module": "commonjs",
      "outDir": "./lib",
-     "rootDir": "./src",
+     "rootDir": "./",
+     "removeComments": true,
      "strict": true,
-     "noImplicitAny": false,
      "esModuleInterop": true,
      "resolveJsonModule": true
    },
-   "include": ["package.json"],
    "exclude": ["node_modules"]
  }

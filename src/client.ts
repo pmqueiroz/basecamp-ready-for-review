@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { dynamicTemplate } from './dynamic-string'
+import * as Core from '@actions/core'
 
 const CHAT_LINES_URL = '/${account_id}/integrations/${chatbot_key}/buckets/${bucket_id}/chats/${chat_id}/lines.json'
 
@@ -10,6 +11,7 @@ interface messageClientConfig {
 }
 
 export const messageClient = async (message: string, config: messageClientConfig) => {
+   Core.debug('Client called')
    const chatLines = dynamicTemplate(CHAT_LINES_URL, config)
 
    const instance = axios.create({
@@ -20,7 +22,5 @@ export const messageClient = async (message: string, config: messageClientConfig
       }
    })
 
-   await instance.post(chatLines, { content: message })
-
-   return { chatLines }
+   return await instance.post(chatLines, { content: message })
 }
