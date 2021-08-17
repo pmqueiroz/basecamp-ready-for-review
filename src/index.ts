@@ -7,7 +7,7 @@ import { PullRequestPayload } from './interface'
 import { version } from '../package.json'
 
 const DEFAULT_MESSAGE_READY_TO_REVIEW = '<p>✨ pull request <b>${pr_title}#${pr_number}</b> is ready for review <a href="${html_url}">↗</a></p>'
-const DEFAULT_MESSAGE_PR_OPEN = '<p>🚀${pr_author} opened pull request <b>${pr_title}#${pr_number}</b> <a href="${html_url}">↗</a></p>'
+const DEFAULT_MESSAGE_PR_OPEN = '<p>🚀 ${pr_author} opened pull request <b>${pr_title}#${pr_number}</b> <a href="${html_url}">↗</a></p>'
 
 const messageFactory = (pull: PullRequestPayload, defaultMessage: string) => {
    const { html_url, number: pr_number, title: pr_title, user: { login: pr_author } } = pull
