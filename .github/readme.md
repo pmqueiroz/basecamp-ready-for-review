@@ -25,7 +25,7 @@ jobs:
            BASECAMP_CHATBOT_SECRET: ${{ secrets.BASECAMP_CHATBOT_KEY }}
         with:
            # https://3.basecampapi.com/ACCOUNT_ID/integrations/BASECAMP_CHATBOT_SECRET/buckets/BUCKET_ID/chats/CHAT_ID/lines.json
-           account_id: "7777777"
-           bucket_id: "7777777"
-           chat_id: "7777777"
+           account_id: 7777777
+           bucket_id: 7777777
+           chat_id: 7777777
 ```
