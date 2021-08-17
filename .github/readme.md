@@ -17,7 +17,7 @@
 
 * Create `.github/workflows/main.yml` file and follows the usage below
 
-## Usage
+## Basic Usage
 
 ```yaml
 on:
@@ -31,7 +31,7 @@ jobs:
       steps:
       - uses: actions/checkout@v2
       - name: Notify Basecamp
-        uses: pmqueiroz/basecamp-ready-for-review@v1
+        uses: pmqueiroz/basecamp-ready-for-review@v2
         env:
            BASECAMP_CHATBOT_SECRET: ${{ secrets.BASECAMP_CHATBOT_KEY }}
         with:
@@ -39,4 +39,29 @@ jobs:
            account_id: "7777777"
            bucket_id: "7777777"
            chat_id: "7777777"
+```
+## Notify PR Opened
+
+```yaml
+on:
+   pull_request:
+      types: [ready_for_review, opened]
+name: Basecamp RfR Notify
+jobs:
+   notifyBasecamp:
+      name: Notify Basecamp
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v2
+      - name: Notify Basecamp
+        uses: pmqueiroz/basecamp-ready-for-review@v2
+        env:
+           BASECAMP_CHATBOT_SECRET: ${{ secrets.BASECAMP_CHATBOT_KEY }}
+        with:
+           # https://3.basecampapi.com/ACCOUNT_ID/integrations/BASECAMP_CHATBOT_SECRET/buckets/BUCKET_ID/chats/CHAT_ID/lines.json
+           account_id: "7777777"
+           bucket_id: "7777777"
+           chat_id: "7777777"
+           notify_open: true # default: false
+           notify_open_when_draft: false # default: false
 ```

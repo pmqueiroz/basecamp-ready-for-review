@@ -1,6 +1,6 @@
 {
     "name": "basecamp-ready-for-review",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Use basecamp chatbots to notify when a PR are ready to review",
     "main": "dist/index.js",
     "repository": "git@github.com:pmqueiroz/basecamp-ready-for-review.git",
