@@ -6,6 +6,15 @@
 
 "use strict";
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -14,7 +23,7 @@ exports.messageClient = void 0;
 const axios_1 = __importDefault(__nccwpck_require__(6545));
 const dynamic_string_1 = __nccwpck_require__(2421);
 const CHAT_LINES_URL = '/${account_id}/integrations/${chatbot_key}/buckets/${bucket_id}/chats/${chat_id}/lines.json';
-const messageClient = (message, config) => {
+const messageClient = (message, config) => __awaiter(void 0, void 0, void 0, function* () {
     const chatLines = dynamic_string_1.dynamicTemplate(CHAT_LINES_URL, config);
     const instance = axios_1.default.create({
         baseURL: 'https://3.basecamp.com',
@@ -23,13 +32,9 @@ const messageClient = (message, config) => {
             'Content-Type': 'application/json'
         }
     });
-    try {
-        instance.post(chatLines, { content: message });
-    }
-    catch (error) {
-        console.error(error === null || error === void 0 ? void 0 : error.message);
-    }
-};
+    yield instance.post(chatLines, { content: message });
+    return { chatLines };
+});
 exports.messageClient = messageClient;
 
 
@@ -92,6 +97,15 @@ const messageFactory = (pull) => {
 };
 try {
     const basecamp_token = process.env.BASECAMP_CHATBOT_SECRET;
+    const accountId = core_1.default.getInput('account_id');
+    const bucketId = core_1.default.getInput('bucket_id');
+    const chatId = core_1.default.getInput('chat_id');
+    core_1.default.info(JSON.stringify({
+        basecamp_token,
+        accountId,
+        bucketId,
+        chatId
+    }));
     if (!basecamp_token) {
         core_1.default.setFailed('Missing BASECAMP_CHATBOT_SECRET environment variable. Eg: \nenv:\n\tBASECAMP_CHATBOT_SECRET: ${{ secrets.BASECAMP_CHATBOT_KEY }}\n ');
     }
@@ -99,15 +113,12 @@ try {
     const pr = payload.pull_request;
     if (!(pr === null || pr === void 0 ? void 0 : pr.draft) && payload.review.state === 'ready_for_review') {
         const message = messageFactory(pr);
-        const accountId = core_1.default.getInput('account_id');
-        const bucketId = core_1.default.getInput('bucket_id');
-        const chatId = core_1.default.getInput('chat_id');
         const config = {
             account_id: accountId,
             bucket_id: bucketId,
-            chat_id: chatId,
+            chat_id: chatId
         };
-        client_1.messageClient(message, config);
+        client_1.messageClient(message, config).then(({ chatLines }) => core_1.default.info(chatLines));
     }
 }
 catch (error) {

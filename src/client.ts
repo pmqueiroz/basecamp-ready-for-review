@@ -9,9 +9,8 @@ interface messageClientConfig {
    chat_id: string
 }
 
-export const messageClient = (message: string, config: messageClientConfig) => {
+export const messageClient = async (message: string, config: messageClientConfig) => {
    const chatLines = dynamicTemplate(CHAT_LINES_URL, config)
-
 
    const instance = axios.create({
       baseURL: 'https://3.basecamp.com',
@@ -21,9 +20,7 @@ export const messageClient = (message: string, config: messageClientConfig) => {
       }
    })
 
-   try {
-      instance.post(chatLines, { content: message })
-   } catch (error) {
-      console.error(error?.message)
-   }
+   await instance.post(chatLines, { content: message })
+
+   return { chatLines }
 }

@@ -15,6 +15,16 @@ const messageFactory = (pull: PullRequestPayload) => {
 
 try {
    const basecamp_token = process.env.BASECAMP_CHATBOT_SECRET
+   const accountId = Core.getInput('account_id')
+   const bucketId = Core.getInput('bucket_id')
+   const chatId = Core.getInput('chat_id')
+
+   Core.info(JSON.stringify({
+      basecamp_token,
+      accountId,
+      bucketId,
+      chatId
+   }))
 
    if (!basecamp_token) {
       Core.setFailed('Missing BASECAMP_CHATBOT_SECRET environment variable. Eg: \nenv:\n\tBASECAMP_CHATBOT_SECRET: ${{ secrets.BASECAMP_CHATBOT_KEY }}\n ')
@@ -26,17 +36,14 @@ try {
    if (!pr?.draft && payload.review.state === 'ready_for_review') {
       const message = messageFactory(pr as PullRequestPayload)
 
-      const accountId = Core.getInput('account_id')
-      const bucketId = Core.getInput('bucket_id')
-      const chatId = Core.getInput('chat_id')
 
       const config = {
          account_id: accountId,
          bucket_id: bucketId,
-         chat_id: chatId,
+         chat_id: chatId
       }
       
-      messageClient(message, config)
+      messageClient(message, config).then(({ chatLines }) => Core.info(chatLines))
    }
 
 } catch (error) {
