@@ -20,7 +20,7 @@ jobs:
       steps:
       - uses: actions/checkout@v2
       - name: Notify Basecamp
-        uses: pmqueiroz/basecamp-ready-for-review@v0.1
+        uses: pmqueiroz/basecamp-ready-for-review@v1
         env:
            BASECAMP_CHATBOT_SECRET: ${{ secrets.BASECAMP_CHATBOT_KEY }}
         with:
