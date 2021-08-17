@@ -43,5 +43,6 @@ try {
    }
 
 } catch (error) {
-   Core.setFailed(error.message)
+   console.error(error.message)
+   Core?.setFailed(error.message)
 }
