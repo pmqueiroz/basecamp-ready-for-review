@@ -12,7 +12,7 @@ interface messageClientConfig {
 export const messageClient = async (message: string, config: messageClientConfig) => {
    const chatLines = dynamicTemplate(CHAT_LINES_URL, config)
 
-   const instance = axios.create({
+   const client = axios.create({
       baseURL: 'https://3.basecamp.com',
       timeout: 1000,
       headers: {
@@ -20,7 +20,7 @@ export const messageClient = async (message: string, config: messageClientConfig
       }
    })
 
-   await instance.post(chatLines, { content: message })
+   await client.post(chatLines, { content: message })
 
    return { chatLines }
 }
