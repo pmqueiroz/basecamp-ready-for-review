@@ -1,5 +1,5 @@
-import Core from '@actions/core'
-import Github from '@actions/github'
+import * as Core from '@actions/core'
+import * as Github from '@actions/github'
 import { dynamicTemplate } from './dynamic-string'
 
 import { messageClient } from './client'
@@ -61,6 +61,5 @@ async function run() {
    }
    
 }
-
 
 run().catch(error => Core.setFailed("Workflow failed! " + error.message))
