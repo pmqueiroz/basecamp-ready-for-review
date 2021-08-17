@@ -13,6 +13,6 @@ jobs:
         env:
            BASECAMP_CHATBOT_SECRET: ${{ secrets.BASECAMP_CHATBOT_KEY }}
         with:
-           account_id: 5158736
-           bucket_id: 23402440
-           chat_id: 4010155947
+           account_id: "5158736"
+           bucket_id: "23402440"
+           chat_id: "4010155947"
