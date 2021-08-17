@@ -29,3 +29,6 @@ jobs:
            bucket_id: "7777777"
            chat_id: "7777777"
 ```
+## Example
+
+<img src="./.github/sample.png"/>
