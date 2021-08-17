@@ -29,24 +29,32 @@ async function run() {
       chatId
    }))
 
-   Core.debug(Github.context.eventName)
-
+   
    if (Github.context.eventName !== "pull_request") {
       Core.setFailed('This workflow can only run on pull requests')
       return
    }
-
+   
+   Core.debug("Pass on is pull request test")
+   
    if (!basecamp_token) {
       Core.setFailed('Missing BASECAMP_CHATBOT_SECRET environment variable. Eg: \nenv:\n\tBASECAMP_CHATBOT_SECRET: ${{ secrets.BASECAMP_CHATBOT_KEY }}\n ')
       return
    }
 
+   Core.debug("Pass on has basecamp token test")
+   
    const payload = Github.context.payload
    const pr = payload.pull_request
+   
+   Core.debug(String(!pr?.draft))
 
    if (!pr?.draft) return
 
+   Core.debug("Pass on is draft test")
+   
    const message = messageFactory(pr as PullRequestPayload)
+   Core.debug("Pass on message fac")
 
    const config = {
       account_id: accountId,
