@@ -47,7 +47,8 @@ async function run() {
    const config = {
       account_id: accountId,
       bucket_id: bucketId,
-      chat_id: chatId
+      chat_id: chatId,
+      chatbot_key: basecamp_token
    }
 
    try {
