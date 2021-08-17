@@ -10,7 +10,7 @@
 
 ```yaml
 on:
-   pull_request:
+   pull_request:aaa
       types: [ready_for_review]
 name: Basecamp RfR Notify
 jobs:
