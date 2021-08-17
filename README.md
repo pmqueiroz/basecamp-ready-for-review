@@ -6,7 +6,7 @@
 
 * Create `.github/workflows/main.yml` file and follows the usage below
 
-## Usage
+## Usageaa
 
 ```yaml
 on:
