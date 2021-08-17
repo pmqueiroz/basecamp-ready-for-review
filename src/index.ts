@@ -29,6 +29,8 @@ async function run() {
       chatId
    }))
 
+   Core.debug(Github.context.eventName)
+
    if (Github.context.eventName !== "pull_request") {
       Core.setFailed('This workflow can only run on pull requests')
       return
