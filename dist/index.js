@@ -85,7 +85,6 @@ const core_1 = __importDefault(__nccwpck_require__(2186));
 const github_1 = __importDefault(__nccwpck_require__(5438));
 const dynamic_string_1 = __nccwpck_require__(2421);
 const client_1 = __nccwpck_require__(1565);
-const CHAT_LINES_URL = 'https://3.basecampapi.com/${account_id}/integrations/${chatbot_key}/buckets/${bucket_id}/chats/${chat_id}/lines.json';
 const DEFAULT_MESSAGE = '<p>✨ ${blame} marked PR#${pr_number} for review <a href="${html_url}">↗</a></p>';
 const messageFactory = (pull) => {
     const { html_url, number } = pull;
