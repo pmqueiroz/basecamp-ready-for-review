@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.messageClient = void 0;
 const https_1 = __importDefault(__nccwpck_require__(7211));
-const core_1 = __importDefault(__nccwpck_require__(2186));
 const messageClient = (message, chatLines) => {
     const options = {
         hostname: 'https://3.basecamp.com',
@@ -25,11 +24,11 @@ const messageClient = (message, chatLines) => {
     const req = https_1.default.request(options, res => {
         console.log(`statusCode: ${res.statusCode}`);
         if (res.statusCode !== 200) {
-            core_1.default.setFailed(`Request failed with ${res.statusCode} status code`);
+            console.error(`Request failed with ${res.statusCode} status code`);
         }
     });
     req.on('error', error => {
-        core_1.default.setFailed(error.message);
+        console.error(error.message);
     });
     req.end();
 };
@@ -88,6 +87,7 @@ const core_1 = __importDefault(__nccwpck_require__(2186));
 const github_1 = __importDefault(__nccwpck_require__(5438));
 const dynamic_string_1 = __nccwpck_require__(2421);
 const client_1 = __nccwpck_require__(1565);
+const CHAT_LINES_URL = 'https://3.basecampapi.com/${account_id}/integrations/${chatbot_key}/buckets/${bucket_id}/chats/${chat_id}/lines.json';
 const DEFAULT_MESSAGE = '<p>✨ ${blame} marked PR#${pr_number} for review <a href="${html_url}">↗</a></p>';
 const messageFactory = (pull) => {
     const { html_url, number } = pull;
@@ -102,13 +102,21 @@ try {
     const pr = payload.pull_request;
     if (!(pr === null || pr === void 0 ? void 0 : pr.draft) && payload.review.state === 'ready_for_review') {
         const message = messageFactory(pr);
-        const chatLinesInput = core_1.default.getInput('chatlines_url');
-        const chatLines = dynamic_string_1.dynamicTemplate(chatLinesInput, { basecamp_api_key: basecamp_token });
+        const accountId = core_1.default.getInput('account_id');
+        const bucketId = core_1.default.getInput('bucket_id');
+        const chatId = core_1.default.getInput('chat_id');
+        const config = {
+            account_id: accountId,
+            bucket_id: bucketId,
+            chat_id: chatId
+        };
+        const chatLines = dynamic_string_1.dynamicTemplate(CHAT_LINES_URL, config);
         client_1.messageClient(message, chatLines);
     }
 }
 catch (error) {
-    core_1.default.setFailed(error.message);
+    console.error(error.message);
+    core_1.default === null || core_1.default === void 0 ? void 0 : core_1.default.setFailed(error.message);
 }
 
 
