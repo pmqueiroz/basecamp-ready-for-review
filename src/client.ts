@@ -22,9 +22,5 @@ export const messageClient = async (message: string, config: messageClientConfig
       }
    })
 
-   const response = await instance.post(chatLines, { content: message })
-
-   Core.debug(response.data)
-
-   return { chatLines }
+   return await instance.post(chatLines, { content: message })
 }

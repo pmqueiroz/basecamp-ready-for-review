@@ -53,9 +53,9 @@ async function run() {
    }
 
    try {
-      const { chatLines } = await messageClient(message, config)
+      const response = await messageClient(message, config)
       
-      Core.debug(chatLines)
+      Core.debug(response?.data)
    } catch (error) {
       Core.setFailed(error)
    }
