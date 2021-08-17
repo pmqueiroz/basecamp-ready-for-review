@@ -6,7 +6,7 @@ import { messageClient } from './client'
 import { PullRequestPayload } from './interface'
 import { version } from '../package.json'
 
-const DEFAULT_MESSAGE = '<p>✨ pull request <b>${pr_title}#${pr_number}</b>is ready for review <a href="${html_url}">↗</a></p>'
+const DEFAULT_MESSAGE = '<p>✨ pull request <b>${pr_title}#${pr_number}</b> is ready for review <a href="${html_url}">↗</a></p>'
 
 const messageFactory = (pull: PullRequestPayload) => {
    const { html_url, number: pr_number, title: pr_title } = pull
