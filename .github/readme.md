@@ -6,6 +6,14 @@
 
 </div>
 
+## Setup
+
+* Create a chatbot on your basecamp follows this [article](https://3.basecamp-help.com/article/160-chatbots-and-webhooks)
+
+* Add your chatbot key to github secret. Click on <kbd>Settings</kbd> > <kbd>Secrets</kbd>
+
+* Create `.github/workflows/main.yml` file and follows the usage below
+
 ## Usage
 
 ```yaml
