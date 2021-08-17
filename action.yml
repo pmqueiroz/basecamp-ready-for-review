@@ -1,0 +1,9 @@
+name: 'Basecamp - Notify ready for review'
+description: 'Use basecamp chatbots to notify when a pull request are ready to review'
+branding:
+  color: purple
+  icon: message-circle
+
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
