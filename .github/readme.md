@@ -24,6 +24,8 @@ jobs:
         env:
            BASECAMP_CHATBOT_SECRET: ${{ secrets.BASECAMP_CHATBOT_KEY }}
         with:
-           # do not replace this ${basecamp_api_key} below
-           chatlines_url: "/7777777/integrations/${basecamp_api_key}/buckets/88888888/chats/9999999999/lines"
+           # https://3.basecampapi.com/ACCOUNT_ID/integrations/BASECAMP_CHATBOT_SECRET/buckets/BUCKET_ID/chats/CHAT_ID/lines.json
+           account_id: "7777777"
+           bucket_id: "7777777"
+           chat_id: "7777777"
 ```
