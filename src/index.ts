@@ -42,7 +42,7 @@ async function run() {
    const payload = Github.context.payload
    const pr = payload.pull_request
 
-   if (!pr?.draft && payload.review.state === 'ready_for_review') return
+   if (!pr?.draft) return
 
    const message = messageFactory(pr as PullRequestPayload)
 
