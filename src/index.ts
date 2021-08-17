@@ -4,6 +4,7 @@ import { dynamicTemplate } from './dynamic-string'
 
 import { messageClient } from './client'
 import { PullRequestPayload } from './interface'
+import { version } from '../package.json'
 
 const DEFAULT_MESSAGE = '<p>✨ ${blame} marked PR#${pr_number} for review <a href="${html_url}">↗</a></p>'
 
@@ -13,13 +14,15 @@ const messageFactory = (pull: PullRequestPayload) => {
    return dynamicTemplate(DEFAULT_MESSAGE, { pr_number: number, html_url })
 }
 
+Core.debug('Running action on version ' + version)
+
 async function run() {
    const basecamp_token = process.env.BASECAMP_CHATBOT_SECRET
    const accountId = Core.getInput('account_id')
    const bucketId = Core.getInput('bucket_id')
    const chatId = Core.getInput('chat_id')
 
-   Core.info(JSON.stringify({
+   Core.debug(JSON.stringify({
       basecamp_token,
       accountId,
       bucketId,
@@ -48,10 +51,15 @@ async function run() {
       bucket_id: bucketId,
       chat_id: chatId
    }
-   
-   const { chatLines } = await messageClient(message, config)
 
-   Core.info(chatLines)
+   try {
+      const { chatLines } = await messageClient(message, config)
+      
+      Core.debug(chatLines)
+   } catch (error) {
+      Core.setFailed(error)
+   }
+   
 }
 
 
