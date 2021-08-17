@@ -16,6 +16,14 @@ inputs:
     description: 'Basecamp chat id'
     required: true
     default: ''
+  notify_open:
+    description: 'Notify when a pull request is open'
+    required: false
+    default: false
+  notify_open_when_draft:
+    description: 'Notify when a pull request is open even if it is a draft pull request'
+    required: false
+    default: false
 
 runs:
   using: 'node12'

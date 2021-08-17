@@ -1,6 +1,6 @@
 on:
    pull_request:
-      types: [ready_for_review]
+      types: [ready_for_review, opened]
 name: Basecamp RfR Notify
 jobs:
    notifyBasecamp:
@@ -16,3 +16,5 @@ jobs:
            account_id: "5158736"
            bucket_id: "23402440"
            chat_id: "4010155947"
+           notify_open: true
+           notify_open_when_draft: false
