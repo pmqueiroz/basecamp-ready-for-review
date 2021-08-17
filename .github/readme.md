@@ -2,9 +2,12 @@
 
 # Basecamp Pull Request Ready for Review Notifier
 
+
 ### Use basecamp chatbots to notify when a PR are ready to review
 
+<img src="./sample.png"/>
 </div>
+
 
 ## Setup
 
