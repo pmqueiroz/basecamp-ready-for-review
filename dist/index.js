@@ -82,6 +82,15 @@ exports.dynamicTemplate = R.curry((templateString, templateVariables) => templat
 
 "use strict";
 
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -95,36 +104,41 @@ const messageFactory = (pull) => {
     const { html_url, number } = pull;
     return dynamic_string_1.dynamicTemplate(DEFAULT_MESSAGE, { pr_number: number, html_url });
 };
-try {
-    const basecamp_token = process.env.BASECAMP_CHATBOT_SECRET;
-    const accountId = core_1.default.getInput('account_id');
-    const bucketId = core_1.default.getInput('bucket_id');
-    const chatId = core_1.default.getInput('chat_id');
-    core_1.default.info(JSON.stringify({
-        basecamp_token,
-        accountId,
-        bucketId,
-        chatId
-    }));
-    if (!basecamp_token) {
-        core_1.default.setFailed('Missing BASECAMP_CHATBOT_SECRET environment variable. Eg: \nenv:\n\tBASECAMP_CHATBOT_SECRET: ${{ secrets.BASECAMP_CHATBOT_KEY }}\n ');
-    }
-    const payload = github_1.default.context.payload;
-    const pr = payload.pull_request;
-    if (!(pr === null || pr === void 0 ? void 0 : pr.draft) && payload.review.state === 'ready_for_review') {
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const basecamp_token = process.env.BASECAMP_CHATBOT_SECRET;
+        const accountId = core_1.default.getInput('account_id');
+        const bucketId = core_1.default.getInput('bucket_id');
+        const chatId = core_1.default.getInput('chat_id');
+        core_1.default.info(JSON.stringify({
+            basecamp_token,
+            accountId,
+            bucketId,
+            chatId
+        }));
+        if (github_1.default.context.eventName !== "pull_request") {
+            core_1.default.setFailed('This workflow can only run on pull requests');
+            return;
+        }
+        if (!basecamp_token) {
+            core_1.default.setFailed('Missing BASECAMP_CHATBOT_SECRET environment variable. Eg: \nenv:\n\tBASECAMP_CHATBOT_SECRET: ${{ secrets.BASECAMP_CHATBOT_KEY }}\n ');
+            return;
+        }
+        const payload = github_1.default.context.payload;
+        const pr = payload.pull_request;
+        if (!(pr === null || pr === void 0 ? void 0 : pr.draft) && payload.review.state === 'ready_for_review')
+            return;
         const message = messageFactory(pr);
         const config = {
             account_id: accountId,
             bucket_id: bucketId,
             chat_id: chatId
         };
-        client_1.messageClient(message, config).then(({ chatLines }) => core_1.default.info(chatLines));
-    }
+        const { chatLines } = yield client_1.messageClient(message, config);
+        core_1.default.info(chatLines);
+    });
 }
-catch (error) {
-    console.error(error.message);
-    core_1.default === null || core_1.default === void 0 ? void 0 : core_1.default.setFailed(error.message);
-}
+run().catch(error => core_1.default.setFailed("Workflow failed! " + error.message));
 
 
 /***/ }),
