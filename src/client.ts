@@ -1,5 +1,4 @@
 import https from 'https'
-import Core from '@actions/core'
 
 export const messageClient = (message: string, chatLines: string) => {
    const options = {
@@ -15,12 +14,12 @@ export const messageClient = (message: string, chatLines: string) => {
       console.log(`statusCode: ${res.statusCode}`)
 
       if (res.statusCode !== 200) {
-         Core.setFailed(`Request failed with ${res.statusCode} status code`)
+         console.error(`Request failed with ${res.statusCode} status code`)
       }
    })
     
     req.on('error', error => {
-      Core.setFailed(error.message)
+      console.error(error.message)
     })
     
     req.end()
