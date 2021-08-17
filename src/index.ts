@@ -5,7 +5,6 @@ import { dynamicTemplate } from './dynamic-string'
 import { messageClient } from './client'
 import { PullRequestPayload } from './interface'
 
-const CHAT_LINES_URL = 'https://3.basecampapi.com/${account_id}/integrations/${chatbot_key}/buckets/${bucket_id}/chats/${chat_id}/lines.json'
 const DEFAULT_MESSAGE = '<p>✨ ${blame} marked PR#${pr_number} for review <a href="${html_url}">↗</a></p>'
 
 const messageFactory = (pull: PullRequestPayload) => {
@@ -34,12 +33,10 @@ try {
       const config = {
          account_id: accountId,
          bucket_id: bucketId,
-         chat_id: chatId
+         chat_id: chatId,
       }
-
-      const chatLines = dynamicTemplate(CHAT_LINES_URL, config)
       
-      messageClient(message, chatLines)
+      messageClient(message, config)
    }
 
 } catch (error) {
