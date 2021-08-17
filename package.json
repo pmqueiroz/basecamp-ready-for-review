@@ -1,0 +1,20 @@
+{
+  "name": "basecamp-ready-for-review",
+  "version": "0.0.1",
+  "description": "Use basecamp chatbots to notify when a PR are ready to review",
+  "main": "dist/index.js",
+  "repository": "git@github.com:pmqueiroz/basecamp-ready-for-review.git",
+  "author": "pmqueiroz <pedroqueiroz593@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+      "build": "tsc && ncc build lib/index.js"
+   },
+  "dependencies": {
+      "@actions/core": "^1.4.0",
+      "@actions/github": "^5.0.0"
+  },
+  "devDependencies": {
+      "@vercel/ncc": "^0.29.1",
+      "typescript": "^4.3.5"
+  }
+}
