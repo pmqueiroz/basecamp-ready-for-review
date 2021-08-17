@@ -6,12 +6,13 @@ import { messageClient } from './client'
 import { PullRequestPayload } from './interface'
 import { version } from '../package.json'
 
-const DEFAULT_MESSAGE = '<p>✨ pull request <b>${pr_title}#${pr_number}</b> is ready for review <a href="${html_url}">↗</a></p>'
+const DEFAULT_MESSAGE_READY_TO_REVIEW = '<p>✨ pull request <b>${pr_title}#${pr_number}</b> is ready for review <a href="${html_url}">↗</a></p>'
+const DEFAULT_MESSAGE_PR_OPEN = '<p>🚀${pr_author} opened pull request <b>${pr_title}#${pr_number}</b> <a href="${html_url}">↗</a></p>'
 
-const messageFactory = (pull: PullRequestPayload) => {
-   const { html_url, number: pr_number, title: pr_title } = pull
+const messageFactory = (pull: PullRequestPayload, defaultMessage: string) => {
+   const { html_url, number: pr_number, title: pr_title, user: { login: pr_author } } = pull
 
-   return dynamicTemplate(DEFAULT_MESSAGE, { pr_title, pr_number, html_url })
+   return dynamicTemplate(defaultMessage, { pr_title, pr_number, html_url, pr_author })
 }
 
 Core.debug('Running action on version ' + version)
@@ -21,6 +22,8 @@ async function run() {
    const accountId = Core.getInput('account_id')
    const bucketId = Core.getInput('bucket_id')
    const chatId = Core.getInput('chat_id')
+   const notifyOpen = Core.getBooleanInput('notify_open')
+   const notifyOpenWhenDraft = Core.getBooleanInput('notify_open_when_draft')
 
    Core.debug(JSON.stringify({
       basecamp_token,
@@ -39,10 +42,20 @@ async function run() {
       return
    }
 
+   
    const payload = Github.context.payload
    const pr = payload.pull_request
 
-   const message = messageFactory(pr as PullRequestPayload)
+   let message = undefined
+
+   if (payload.action === 'opened' && pr?.draft === notifyOpenWhenDraft) {
+      message = messageFactory(pr as PullRequestPayload, DEFAULT_MESSAGE_PR_OPEN)
+   } else if (payload.action === 'ready_for_review') {
+      message = messageFactory(pr as PullRequestPayload, DEFAULT_MESSAGE_READY_TO_REVIEW)
+   } else {
+      Core.setFailed('Payload type must be opened | ready_for_review')
+      return
+   }
 
    const config = {
       account_id: accountId,
