@@ -42,6 +42,8 @@ async function run() {
    const payload = Github.context.payload
    const pr = payload.pull_request
 
+   Core.debug(JSON.stringify(pr))
+
    const message = messageFactory(pr as PullRequestPayload)
 
    const config = {
