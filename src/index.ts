@@ -22,7 +22,7 @@ async function run() {
    const bucketId = Core.getInput('bucket_id')
    const chatId = Core.getInput('chat_id')
 
-   Core.info(JSON.stringify({
+   Core.debug(JSON.stringify({
       basecamp_token,
       accountId,
       bucketId,
@@ -51,10 +51,15 @@ async function run() {
       bucket_id: bucketId,
       chat_id: chatId
    }
-   
-   const { chatLines } = await messageClient(message, config)
 
-   Core.info(chatLines)
+   try {
+      const { chatLines } = await messageClient(message, config)
+      
+      Core.debug(chatLines)
+   } catch (error) {
+      Core.setFailed(error)
+   }
+   
 }
 
 
