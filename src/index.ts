@@ -42,8 +42,6 @@ async function run() {
    const payload = Github.context.payload
    const pr = payload.pull_request
 
-   if (!pr?.draft) return
-
    const message = messageFactory(pr as PullRequestPayload)
 
    const config = {
