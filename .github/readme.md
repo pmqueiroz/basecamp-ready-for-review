@@ -65,3 +65,10 @@ jobs:
            notify_open: true # default: false
            notify_open_when_draft: false # default: false
 ```
+## Features Todo
+
+- [ ] Notify when someone merge a pull request
+
+- [ ] Custom template messages
+
+- [ ] Change emoji per label detected
