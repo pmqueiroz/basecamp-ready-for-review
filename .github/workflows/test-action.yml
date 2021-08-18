@@ -19,5 +19,5 @@ jobs:
            notify_open: true
            notify_open_when_draft: false
            custom_template: |
-              OPENED:PREFIX=yee haw
-              READY_FOR_REVIEW:PREFIX=teste
+              OPENED:PREFIX=💥
+              READY_FOR_REVIEW:PREFIX=🦆
