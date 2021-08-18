@@ -18,3 +18,6 @@ jobs:
            chat_id: "4010155947"
            notify_open: true
            notify_open_when_draft: false
+           custom_template: |
+              OPENED:PREFIX=yee haw
+              READY_FOR_REVIEW:PREFIX=teste

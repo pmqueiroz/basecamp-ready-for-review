@@ -1,29 +1,63 @@
 import * as Core from '@actions/core'
 import * as Github from '@actions/github'
-import { dynamicTemplate } from './dynamic-string'
+import { dynamicTemplate } from './utils/dynamic-string'
 
-import { messageClient } from './client'
-import { PullRequestPayload } from './interface'
+import { messageClient } from './utils/client'
+import { customTemplateFactory, applyCustomTemplate } from './utils/custom-template'
+import { PullRequestPayload } from './types/interface'
 import { version } from '../package.json'
 
-const DEFAULT_MESSAGE_READY_TO_REVIEW = '<p>✨ pull request <b>${pr_title}#${pr_number}</b> is ready for review <a href="${html_url}">↗</a></p>'
-const DEFAULT_MESSAGE_PR_OPEN = '<p>🚀 ${pr_author} opened pull request <b>${pr_title}#${pr_number}</b> <a href="${html_url}">↗</a></p>'
+const DEFAULT_READY_TO_REVIEW_PREFIX = '✨'
+const DEFAULT_PR_OPEN_PREFIX = '🚀'
+const DEFAULT_PR_CLOSED_PREFIX = '❌'
+const DEFAULT_PR_MERGED_PREFIX = '🎈'
 
-const messageFactory = (pull: PullRequestPayload, defaultMessage: string) => {
+const DEFAULT_MESSAGE_READY_TO_REVIEW = '<p>${prefix} pull request <b>${pr_title}#${pr_number}</b> is ${action} <a href="${html_url}">↗</a></p>'
+const DEFAULT_PR_ACTIONS = '<p>${prefix} ${pr_author} ${action} pull request <b>${pr_title}#${pr_number}</b> <a href="${html_url}">↗</a></p>'
+
+const PR_ACTIONS = {
+   READY_FOR_REVIEW: {
+      action: 'ready for review',
+      prefix: DEFAULT_READY_TO_REVIEW_PREFIX,
+      defaultMessage: DEFAULT_MESSAGE_READY_TO_REVIEW
+   },
+   OPENED: {
+      action: 'opened',
+      prefix: DEFAULT_PR_OPEN_PREFIX,
+      defaultMessage: DEFAULT_PR_ACTIONS
+   },
+   MERGED: {
+      action: 'merged',
+      prefix: DEFAULT_PR_MERGED_PREFIX,
+      defaultMessage: DEFAULT_PR_ACTIONS
+   },
+   CLOSED: {
+      action: 'closed',
+      prefix: DEFAULT_PR_CLOSED_PREFIX,
+      defaultMessage: DEFAULT_PR_ACTIONS
+   },
+}
+
+const messageFactory = (pull: PullRequestPayload, prAction: keyof typeof PR_ACTIONS, customTemplate: Record<string, any>) => {
    const { html_url, number: pr_number, title: pr_title, user: { login: pr_author } } = pull
 
-   return dynamicTemplate(defaultMessage, { pr_title, pr_number, html_url, pr_author })
+   const mergedTemplate = applyCustomTemplate(PR_ACTIONS, customTemplate)
+
+   const { action, defaultMessage, prefix } = mergedTemplate
+
+   return dynamicTemplate(defaultMessage, { pr_title, pr_number, html_url, pr_author, action, prefix, ...customTemplate })
 }
 
 Core.debug('Running action on version ' + version)
 
 async function run() {
    const basecamp_token = process.env.BASECAMP_CHATBOT_SECRET
-   const accountId = Core.getInput('account_id')
-   const bucketId = Core.getInput('bucket_id')
-   const chatId = Core.getInput('chat_id')
+   const accountId = Core.getInput('account_id', { required: true })
+   const bucketId = Core.getInput('bucket_id', { required: true })
+   const chatId = Core.getInput('chat_id', { required: true })
    const notifyOpen = Core.getBooleanInput('notify_open')
    const notifyOpenWhenDraft = Core.getBooleanInput('notify_open_when_draft')
+   const customTemplateInput = Core.getMultilineInput('custom_template')
 
    Core.debug(JSON.stringify({
       basecamp_token,
@@ -42,16 +76,17 @@ async function run() {
       return
    }
 
+   const parsedTemplate = customTemplateFactory(customTemplateInput)
    
    const payload = Github.context.payload
    const pr = payload.pull_request
 
    let message = undefined
 
-   if (payload.action === 'opened' && pr?.draft === notifyOpenWhenDraft) {
-      message = messageFactory(pr as PullRequestPayload, DEFAULT_MESSAGE_PR_OPEN)
+   if (payload.action === 'opened' && notifyOpen && pr?.draft === notifyOpenWhenDraft) {
+      message = messageFactory(pr as PullRequestPayload, "OPENED", parsedTemplate)
    } else if (payload.action === 'ready_for_review') {
-      message = messageFactory(pr as PullRequestPayload, DEFAULT_MESSAGE_READY_TO_REVIEW)
+      message = messageFactory(pr as PullRequestPayload, "READY_FOR_REVIEW", parsedTemplate)
    } else {
       Core.setFailed('Payload type must be opened | ready_for_review')
       return

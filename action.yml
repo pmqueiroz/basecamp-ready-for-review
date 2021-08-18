@@ -24,6 +24,10 @@ inputs:
     description: 'Notify when a pull request is open even if it is a draft pull request'
     required: false
     default: false
+  custom_template:
+    description: 'Customize messages that will be published on basecamp'
+    required: false
+    default: ''
 
 runs:
   using: 'node12'

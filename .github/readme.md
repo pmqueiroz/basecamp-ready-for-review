@@ -69,6 +69,6 @@ jobs:
 
 - [ ] Notify when someone merge a pull request
 
-- [ ] Custom template messages
+- [x] Custom template messages
 
 - [ ] Change emoji per label detected
