@@ -43,7 +43,7 @@ const messageFactory = (pull: PullRequestPayload, prAction: keyof typeof PR_ACTI
 
    const mergedTemplate = applyCustomTemplate(PR_ACTIONS, customTemplate)
 
-   const { action, defaultMessage, prefix } = mergedTemplate
+   const { action, defaultMessage, prefix } = mergedTemplate[prAction]
 
    return dynamicTemplate(defaultMessage, { pr_title, pr_number, html_url, pr_author, action, prefix, ...customTemplate })
 }
