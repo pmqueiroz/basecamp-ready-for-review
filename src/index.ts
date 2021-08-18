@@ -63,7 +63,8 @@ async function run() {
       basecamp_token,
       accountId,
       bucketId,
-      chatId
+      chatId,
+      customTemplateInput
    }))
 
    if (Github.context.eventName !== "pull_request") {
