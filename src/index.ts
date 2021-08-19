@@ -48,7 +48,7 @@ const messageFactory = (pull: PullRequestPayload, prAction: keyof typeof PR_ACTI
 
    const { action, defaultMessage, prefix } = mergedTemplate[prAction]
 
-   return dynamicTemplate(defaultMessage, { pr_title, pr_number, html_url, pr_author, action, prefix, ...customTemplate })
+   return dynamicTemplate(defaultMessage, { pr_title, pr_number, html_url, pr_author, action, prefix })
 }
 
 Core.debug('Running action on version ' + version)
