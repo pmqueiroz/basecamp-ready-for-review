@@ -20,4 +20,5 @@ jobs:
            notify_open_when_draft: false
            custom_template: |
               OPENED:PREFIX=💥
+              READY_FOR_REVIEW:MESSAGE=<p>${prefix} przão <b>${pr_title}#${pr_number} brabo </b> ta prontinho ai <a href="${html_url}">LINKZÃO</a></p>
               READY_FOR_REVIEW:PREFIX=🦆
