@@ -1,6 +1,8 @@
 import * as R from 'ramda'
 import camelCase from 'camelcase'
 
+const getConfig = (str: string) => [str.substring(0, str.indexOf('=')), str.substring(str.indexOf('=')+1)]
+
 export const applyCustomTemplate = (layout: Record<string, any>, template: Record<string, any>, deep=false) => {
    let concatValues = (_: string, l: any, r: any) => deep === true ? R.concat(l, r) : r
 
@@ -9,9 +11,7 @@ export const applyCustomTemplate = (layout: Record<string, any>, template: Recor
 
 export const customTemplateFactory = (template: string[]) => {
    return template.reduce((acc, curr) => {
-      const config = curr.split('=')
-
-      const [fieldName, fieldValue] = config
+      const [fieldName, fieldValue] = getConfig(curr)
 
       let [action, scope] = fieldName.split(':')
 
