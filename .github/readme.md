@@ -65,3 +65,50 @@ jobs:
            notify_open: true # default: false
            notify_open_when_draft: false # default: false
 ```
+
+## Other Features
+
+### Templates *(non-released features)*
+
+You can change the messages templates with the syntax below:
+
+```yaml
+with:
+custom_template: |
+   OPENED:PREFIX=💥
+   READY_FOR_REVIEW:MESSAGE=<p>${prefix} #${pr_number} is ready for review</p>
+```
+
+| Variable                 | Default                            |
+| ------------------------ | ---------------------------------- |
+| READY_FOR_REVIEW:PREFIX  | `✨`                               |
+| READY_FOR_REVIEW:MESSAGE | `$DEFAULT_MESSAGE_READY_TO_REVIEW` |
+| OPENED:PREFIX            | `🚀`                               |
+| OPENED:MESSAGE           | `$DEFAULT_PR_ACTIONS`              |
+| MERGED:PREFIX            | `🎈`                               |
+| MERGED:MESSAGE           | `$DEFAULT_PR_ACTIONS`              |
+| CLOSED:PREFIX            | `❌`                               |
+| CLOSED:MESSAGE           | `$DEFAULT_PR_ACTIONS`              |
+
+DEFAULT_MESSAGE_READY_TO_REVIEW = `<p>${prefix} pull request <b>${pr_title}#${pr_number}</b> is ${action} <a href="${html_url}">↗</a></p>`
+
+DEFAULT_PR_ACTIONS = `<p>${prefix} ${pr_author} ${action} pull request <b>${pr_title}#${pr_number}</b> <a href="${html_url}">↗</a></p>`
+
+#### Available message variables
+
+| Variables |
+| --------- |
+| pr_title  |
+| pr_number |
+| html_url  |
+| pr_author |
+| action    |
+| prefix    | 
+
+## Features Todo
+
+- [ ] Notify when someone merge a pull request
+
+- [x] Custom template messages
+
+- [ ] Change emoji per label detected
